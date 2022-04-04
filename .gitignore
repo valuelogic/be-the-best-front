@@ -161,3 +161,5 @@ fabric.properties
 !.idea/runConfigurations
 
 # End of https://www.toptal.com/developers/gitignore/api/react,webstorm+all,visualstudiocode,cypressio
+
+!.idea/externalDependencies.xml
