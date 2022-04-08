@@ -1,14 +1,22 @@
+import { Web3Provider } from '@ethersproject/providers';
+import { Web3ReactProvider } from '@web3-react/core';
 import React from 'react';
+import { createRoot } from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createRoot } from 'react-dom/client';
+
+const getLibrary = (provider: any) => {
+	return new Web3Provider(provider);
+};
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 root.render(
 	<React.StrictMode>
-		<App />
+		<Web3ReactProvider getLibrary={getLibrary}>
+			<App />
+		</Web3ReactProvider>
 	</React.StrictMode>
 );
 
