@@ -17,11 +17,11 @@ const Header = () => {
 			}
 		};
 		getUserData();
-	}, [active]);
+	}, [active, userWalletAddress, provider]);
 
 	const connectMetamask = async () => {
 		try {
-			const injected: InjectedConnector = new InjectedConnector({});
+			const injected = new InjectedConnector({});
 			await activate(injected);
 		} catch (e) {
 			console.log(e);
