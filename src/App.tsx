@@ -1,14 +1,17 @@
 import React from 'react';
-import styles from './App.module.scss';
-import Header from './components/layout/Header';
+import Header from './components/layout/header/Header';
 
-const App = () => {
-	return (
-		<div>
-			<Header />
-			<div className={styles.app}>BeTheBest</div>
-		</div>
-	);
+const styles = {
+	app: {
+		fontFamily: 'Arial',
+		margin: 0
+	} as React.CSSProperties
 };
+
+const App = () => (
+	<div style={styles.app}>
+		<Header/>
+	</div>
+);
 
 export default App;
