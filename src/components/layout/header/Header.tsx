@@ -19,6 +19,7 @@ const styles = {
 	connectionInfo: {
 		display: 'inline-grid',
 		fontSize: 'small',
+
 		color: 'grey',
 	} as React.CSSProperties,
 };
