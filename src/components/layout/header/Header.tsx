@@ -1,63 +1,40 @@
-import {useWeb3React} from '@web3-react/core';
-import React, {useEffect, useState} from 'react';
-import {connectMetamask} from '../../../services/metamask/ConnectMetamask';
-import {disconnectMetamask} from '../../../services/metamask/DisconnectMetamask';
-
+import React from 'react';
+import { useMoralis } from 'react-moralis';
+import { ConnectButton } from 'web3uikit';
 const styles = {
 	header: {
-		textAlign: 'center'
+		textAlign: 'center',
 	} as React.CSSProperties,
 	navbar: {
 		padding: 16,
-		marginBottom: 16
+		marginBottom: 16,
 	} as React.CSSProperties,
 	title: {
-		float: 'left'
+		float: 'left',
 	} as React.CSSProperties,
 	connectButton: {
 		float: 'right',
-		cursor: 'pointer'
+		cursor: 'pointer',
 	} as React.CSSProperties,
 	connectionInfo: {
 		display: 'inline-grid',
 		fontSize: 'small',
-		color: 'grey'
-	} as React.CSSProperties
+		color: 'grey',
+	} as React.CSSProperties,
 };
 
 const Header = () => {
-	const { activate, active, deactivate, library: provider } = useWeb3React();
-	const [userWalletAddress, setUserWalletAddress] = useState('');
-
-	useEffect(() => {
-		const getUserData = async () => {
-			if (active) {
-				const signer = await provider.getSigner();
-				const userWalletAddress = await signer.getAddress();
-				setUserWalletAddress(userWalletAddress);
-			} else {
-				setUserWalletAddress('');
-			}
-		};
-		getUserData();
-	}, [active, userWalletAddress, provider]);
+	const { isWeb3Enabled } = useMoralis();
 
 	return (
 		<div style={styles.header}>
 			<div style={styles.navbar}>
 				<div style={styles.title}>BeTheBest</div>
-				{active ? (
-					<div style={styles.connectButton} onClick={() => disconnectMetamask(deactivate)}>Disconnect</div>
-				) : (
-					<div style={styles.connectButton} onClick={() => connectMetamask(activate)}>Connect</div>
-				)}
-			</div>
-			{active &&
-				<div style={styles.connectionInfo} >
-					<span>Connected wallet at:</span>
-					<span>{userWalletAddress}</span>
+
+				<div style={styles.connectButton}>
+					<ConnectButton moralisAuth={false}></ConnectButton>
 				</div>
-			}
+			</div>
 		</div>
 	);
 };
