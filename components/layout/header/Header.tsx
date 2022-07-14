@@ -25,8 +25,6 @@ const styles = {
 };
 
 const Header = () => {
-	const { isWeb3Enabled } = useMoralis();
-
 	return (
 		<div style={styles.header}>
 			<div style={styles.navbar}>
