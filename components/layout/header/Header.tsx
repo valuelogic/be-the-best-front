@@ -1,5 +1,4 @@
 import React from 'react';
-import { useMoralis } from 'react-moralis';
 import { ConnectButton } from 'web3uikit';
 const styles = {
 	header: {
