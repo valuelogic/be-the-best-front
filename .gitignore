@@ -145,3 +145,4 @@ fabric.properties
 !.idea/codeStyles
 !.idea/runConfigurations
 next-env.d.ts
+Project.xml
