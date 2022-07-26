@@ -1,5 +1,6 @@
 {
 	"singleQuote": true,
 	"jsxSingleQuote": false,
-	"useTabs": true
+	"useTabs": true,
+	"editorConfig": true
 }

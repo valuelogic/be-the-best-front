@@ -1,5 +1,3 @@
 {
-  "recommendations": [
-	"SonarSource.sonarlint-vscode"
-  ]
+	"recommendations": ["SonarSource.sonarlint-vscode", "esbenp.prettier-vscode"]
 }
