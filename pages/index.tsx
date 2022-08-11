@@ -1,5 +1,6 @@
 import type { NextPage } from 'next';
 import Header from '../components/layout/header/Header';
+import { Activities } from '../components/activities/Activities';
 
 const styles = {
 	app: {
@@ -12,6 +13,7 @@ const Home: NextPage = () => {
 	return (
 		<div style={styles.app}>
 			<Header />
+			<Activities />
 		</div>
 	);
 };
