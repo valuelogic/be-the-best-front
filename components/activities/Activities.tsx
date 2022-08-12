@@ -4,29 +4,31 @@ import {
 	Activities as ActivitiesNs,
 	Activities__factory,
 	Players__factory,
+	Requests__factory,
 } from '../../constants/typechain-types';
-import addresses from '../../constants/addresses.json';
 import { ethers } from 'ethers';
-import { Button, Table, Tag } from 'web3uikit';
+import { Button, Table, Tag, getEllipsisTxt } from 'web3uikit';
 import { SharedModel } from '../../constants/typechain-types/contracts/Players';
-
-interface IContractAddresses {
-	[chainId: string]: Record<string, string>;
-}
+import { getContractAddress } from '../../utils/getContractAddress';
 
 export const Activities: React.FC = () => {
 	const { chainId: chainIdHex, isWeb3Enabled, account } = useMoralis();
 	const chainId = Number.parseInt(chainIdHex!).toString();
 
-	const activitiesAddress: string | undefined =
-		chainId.toString() in addresses
-			? (addresses as IContractAddresses)[chainId.toString()].Activities
-			: undefined;
+	const activitiesAddress: string | undefined = getContractAddress(
+		'Activities',
+		chainId
+	);
 
-	const playersAddress: string | undefined =
-		chainId.toString() in addresses
-			? (addresses as IContractAddresses)[chainId.toString()].Players
-			: undefined;
+	const playersAddress: string | undefined = getContractAddress(
+		'Players',
+		chainId
+	);
+
+	const requestsAddress: string | undefined = getContractAddress(
+		'Requests',
+		chainId
+	);
 
 	const [activities, setActivities] = useState<
 		ActivitiesNs.ActivityDtoStruct[]
@@ -47,26 +49,29 @@ export const Activities: React.FC = () => {
 		params: { _walletAddress: account },
 	});
 
-	const updateUI = async () => {
-		const activities = (await getActivities()) as any; // as ActivitiesNs.ActivityDtoStruct[];
-		setActivities(activities as ActivitiesNs.ActivityDtoStruct[]);
+	const { runContractFunction: request } = useWeb3Contract({
+		abi: Requests__factory.abi,
+		functionName: 'request',
+		contractAddress: requestsAddress,
+	});
 
-		const player = (await getPlayer()) as SharedModel.PlayerStructOutput;
-		setPlayer(player);
+	const updateUI = async () => {
+		setActivities((await getActivities()) as ActivitiesNs.ActivityDtoStruct[]);
+		setPlayer((await getPlayer()) as SharedModel.PlayerStruct);
 	};
 
 	useEffect(() => {
 		if (isWeb3Enabled) {
 			updateUI();
 		}
-	}, [isWeb3Enabled, account]);
+	}, [isWeb3Enabled]);
 
 	if (!isWeb3Enabled) {
 		return <div>Web3 Disabled</div>;
 	}
 
 	if (!player || player.walletAddress === ethers.constants.AddressZero) {
-		return <div>You're not a player</div>;
+		return <div>You&apos;re not a player</div>;
 	}
 
 	return (
@@ -81,15 +86,20 @@ export const Activities: React.FC = () => {
 					activity.reward.toString(),
 					activity.isActive ? 'true' : 'false',
 					<Tag
-						text={`0x${activity.contractAddress.slice(
-							0,
-							4
-						)}...${activity.contractAddress.slice(-6)}`}
+						key={`${activity.contractAddress}__tag`}
+						text={getEllipsisTxt(`0x${activity.contractAddress}`)}
 					/>,
 					<Button
+						key={`${activity.contractAddress}__requestButton`}
 						disabled={!activity.isActive}
-						onClick={() => {
-							alert('Coming soon');
+						onClick={async () => {
+							await request({
+								params: {
+									params: {
+										_activity: activity.contractAddress,
+									},
+								},
+							});
 						}}
 						text="Request"
 					/>,
