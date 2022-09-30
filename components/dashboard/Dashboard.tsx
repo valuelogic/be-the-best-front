@@ -33,7 +33,7 @@ export const Dashboard: React.FC = () => {
 			.map((player) => {
 				return {
 					name: player.nick.toString() ?? player.walletAddress.toString(),
-					points: Math.floor(Math.random() * 1000)
+					points: Number(player.points)
 				}
 			});
 		players.sort((p1, p2) => p2.points - p1.points)
